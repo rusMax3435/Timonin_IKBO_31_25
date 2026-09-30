@@ -5,7 +5,7 @@ grep -o ‘^[^:]*’ /etc/passwd | sort
 
 task2: 
 ```
-cat /etc/protocols | sort -rnk2 | head -n 5 | awk ‘{print $1, $2}’
+cat /etc/protocols | sort -rnk2 | head -n 5 | awk ‘{print $2, $1}’
 ```
 task4:
 ```
