@@ -12,4 +12,4 @@ chmod +x “$1”
 sudo cp “$1” /usr/local/bin
 
 task8: 
-Tar -cf  “ArchiveTest1.tar” *”$1”
+tar -cf  “ArchiveTest1.tar” *”$1”
