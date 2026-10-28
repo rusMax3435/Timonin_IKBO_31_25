@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "nodes": [
+    {"path": "/", "type": "dir", "content_base64": ""}
+  ]
+}

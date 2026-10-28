@@ -1,9 +1,14 @@
+import sys
+from pathlib import Path
+
 from config import Config
 from enums import Command, CommandExecutionStatus
+from vfs.vfs import VFS
 
 
 class CommandExecutor:
-    def __init__(self, config: Config) -> None:
+    def __init__(self, vfs: VFS, config: Config) -> None:
+        self.vfs = vfs
         self.config = config
 
     def execute(self, tokens: list[str]) -> CommandExecutionStatus:
@@ -36,6 +41,17 @@ class CommandExecutor:
                 return CommandExecutionStatus.WRONG_ARGUMENT
             print(f"vfs_path={self.config.vfs_path}")
             print(f"start_script_path={self.config.start_script_path}")
+            return CommandExecutionStatus.OK
+
+        if command is Command.VFS_SAVE:
+            if len(tokens) != 2:
+                return CommandExecutionStatus.WRONG_ARGUMENT
+            try:
+                self.vfs.save(Path(tokens[1]))
+            except OSError as e:
+                print(f"[ERROR] vfs-save failed: {e}", file=sys.stderr)
+                return CommandExecutionStatus.EXECUTION_ERROR
+            print(f"[OK] VFS saved to {tokens[1]}")
             return CommandExecutionStatus.OK
 
         return CommandExecutionStatus.COMMAND_NOT_FOUND

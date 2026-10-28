@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "nodes": [
+    {"path": "/", "type": "dir", "content_base64": ""},
+    {"path": "/home", "type": "dir", "content_base64": ""},
+    {"path": "/home/user", "type": "dir", "content_base64": ""},
+    {"path": "/home/user/projects", "type": "dir", "content_base64": ""},
+    {"path": "/home/user/projects/myapp", "type": "dir", "content_base64": ""},
+    {"path": "/home/user/projects/myapp/src", "type": "dir", "content_base64": ""},
+    {"path": "/home/user/projects/myapp/src/main.py", "type": "file", "content_base64": "cHJpbnQoImhpIikK"},
+    {"path": "/home/user/projects/myapp/README.md", "type": "file", "content_base64": "IyBteWFwcAo="},
+    {"path": "/var", "type": "dir", "content_base64": ""},
+    {"path": "/var/log", "type": "dir", "content_base64": ""},
+    {"path": "/var/log/app.log", "type": "file", "content_base64": "bG9nCg=="},
+    {"path": "/tmp", "type": "dir", "content_base64": ""}
+  ]
+}

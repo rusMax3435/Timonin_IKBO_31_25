@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "nodes": [
+    {"path": "/", "type": "dir", "content_base64": ""},
+    {"path": "/home", "type": "dir", "content_base64": ""},
+    {"path": "/home/readme.txt", "type": "file", "content_base64": "SGVsbG8sIHdvcmxkIQo="},
+    {"path": "/home/notes.txt", "type": "file", "content_base64": "Tm90ZXM="},
+    {"path": "/etc", "type": "dir", "content_base64": ""},
+    {"path": "/etc/config.json", "type": "file", "content_base64": "eyJhIjoxfQo="}
+  ]
+}

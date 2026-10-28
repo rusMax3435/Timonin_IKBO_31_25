@@ -12,6 +12,7 @@ class CommandExecutionStatus(Enum):
     COMMAND_NOT_FOUND = "Got an unknown command."
     WRONG_ARGUMENT = "Wrong arguments provided."
     TERMINATE_EMULATOR = "Got a call to terminate emulator. Exiting."
+    EXECUTION_ERROR = ""   # detailed message printed by the command itself
 
     @property
     def message(self) -> str:
@@ -23,6 +24,7 @@ class Command(Enum):
     LS = ("ls", "Stub for ls.")
     CD = ("cd", "Stub for cd.")
     CONF_DUMP = ("conf-dump", "Prints emulator configuration.")
+    VFS_SAVE = ("vfs-save", "Saves VFS to JSON.")
 
     def __init__(self, command_name: str, help_message: str) -> None:
         self.command_name = command_name

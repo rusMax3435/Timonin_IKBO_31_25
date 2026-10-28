@@ -27,7 +27,11 @@ class REPL:
             return CommandExecutionStatus.OK
         tokens = self.parser.parse_input(line)
         status = self.executor.execute(tokens)
-        if status not in (CommandExecutionStatus.OK, CommandExecutionStatus.TERMINATE_EMULATOR):
+        if status not in (
+            CommandExecutionStatus.OK,
+            CommandExecutionStatus.TERMINATE_EMULATOR,
+            CommandExecutionStatus.EXECUTION_ERROR,   # already printed by command
+        ):
             print(status.message, file=sys.stderr)
         return status
 
@@ -49,8 +53,9 @@ class REPL:
                     return
 
                 if status != CommandExecutionStatus.OK:
+                    reason = status.message or "execution error"
                     print(
-                        f"[SCRIPT] Stopped at line {line_no}: {status.message}",
+                        f"[SCRIPT] Stopped at line {line_no}: {reason}",
                         file=sys.stderr,
                     )
                     return
@@ -60,12 +65,6 @@ class REPL:
     def start(self) -> int:
         print("(i) REPL is ready.")
         self.status = REPLStatus.RUNNING
-
-        if not os.path.isfile(self.config.vfs_path):
-            print(f"[FATAL] VFS file not found: {self.config.vfs_path}", file=sys.stderr)
-            print("(i) REPL isn't working.")
-            return 1
-        print(f"[INFO] VFS is ready: {self.config.vfs_path}")
 
         self._run_start_script()
 
