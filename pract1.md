@@ -97,3 +97,4 @@ for file in "$1"/*; do
 done
 ```
 
+Продолжение: https://github.com/rusMax3435/Timonin_IKBO_31_25/tree/main/Pract1SDO
