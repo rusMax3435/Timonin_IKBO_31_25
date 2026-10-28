@@ -22,6 +22,7 @@ class Command(Enum):
     EXIT = ("exit", "Terminates the emulator.")
     LS = ("ls", "Stub for ls.")
     CD = ("cd", "Stub for cd.")
+    CONF_DUMP = ("conf-dump", "Prints emulator configuration.")
 
     def __init__(self, command_name: str, help_message: str) -> None:
         self.command_name = command_name

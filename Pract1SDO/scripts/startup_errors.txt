@@ -1,0 +1,3 @@
+conf-dump
+bogus-cmd arg1
+ls /tmp

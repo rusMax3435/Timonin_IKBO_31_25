@@ -1,0 +1,5 @@
+conf-dump
+ls
+ls /tmp
+cd /etc
+ls a b c
