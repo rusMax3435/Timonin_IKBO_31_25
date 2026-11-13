@@ -1,0 +1,18 @@
+# Служебные файлы Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Pytest_cache/
+.coverage
+htmlcov/
+
+# Виртуальное окружение
+venv/
+env/
+.env/
+
+# Настройки редакторов
+.vscode/
+.idea/
+*.swp
+*.swo
