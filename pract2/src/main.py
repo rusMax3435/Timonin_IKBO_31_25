@@ -48,6 +48,11 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-o", "--output", required=True, help="Имя файла изображения графа"
     )
+    # Новый флаг для Этапа 4
+    parser.add_argument(
+        "-rev", "--reverse", action="store_true", 
+        help="Вывод обратных зависимостей"
+    )
     return parser
 
 
@@ -79,10 +84,20 @@ def main() -> None:
         sys.exit(1)
 
     try:
+        # Сначала всегда строим прямой граф
         dep_graph = graph.build_graph_bfs(
             args.package, args.repo, args.test_mode
         )
-        graph.print_graph(dep_graph)
+        
+        if args.reverse:
+            # Строим и выводим обратный граф на основе прямого
+            rev_graph = graph.build_reverse_graph_bfs(
+                args.package, dep_graph
+            )
+            graph.print_reverse_graph(rev_graph)
+        else:
+            graph.print_graph(dep_graph)
+            
     except Exception as error:
         print(f"Ошибка при построении графа: {error}", file=sys.stderr)
         sys.exit(1)

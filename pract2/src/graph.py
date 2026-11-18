@@ -26,13 +26,11 @@ def load_test_graph(filepath: str) -> dict[str, list[str]]:
 
 def get_real_dependencies(pkg_name: str) -> list[str]:
     """Пытается получить зависимости из GitHub по имени пакета."""
-    # Так как API менеджеров запрещены, угадываем URL по шаблону
     guessed_url = f"https://github.com/{pkg_name}/{pkg_name}"
     try:
         content = fetcher.fetch_cargo_toml(guessed_url, "latest", False)
         return parser.extract_dependencies(content)
     except Exception:
-        # Если репозиторий не найден или нет сети, пакет - лист
         return []
 
 
@@ -72,9 +70,48 @@ def build_graph_bfs(root_pkg: str, source: str, test_mode: bool):
     return graph
 
 
+def build_reverse_graph_bfs(target_pkg: str, forward_graph: dict):
+    """Строит граф обратных зависимостей с помощью BFS."""
+    # 1. Создаем перевернутый список смежности
+    reverse_adj = {}
+    for pkg, deps in forward_graph.items():
+        for dep in deps:
+            if dep not in reverse_adj:
+                reverse_adj[dep] = []
+            reverse_adj[dep].append(pkg)
+
+    # 2. Запускаем BFS по перевернутому графу
+    visited = set()
+    queue = collections.deque([target_pkg])
+    result_graph = {}
+
+    while queue:
+        current = queue.popleft()
+        if current in visited:
+            continue
+        visited.add(current)
+
+        parents = reverse_adj.get(current, [])
+        result_graph[current] = parents
+
+        for parent in parents:
+            if parent not in visited:
+                queue.append(parent)
+
+    return result_graph
+
+
 def print_graph(graph: dict[str, list[str]]) -> None:
-    """Выводит граф зависимостей в формате ключ-значение."""
-    print("\n=== Граф зависимостей (BFS) ===")
+    """Выводит граф прямых зависимостей."""
+    print("\n=== Прямые зависимости (BFS) ===")
     for pkg, deps in graph.items():
         deps_str = ", ".join(deps) if deps else "нет"
         print(f"{pkg} -> {deps_str}")
+
+
+def print_reverse_graph(graph: dict[str, list[str]]) -> None:
+    """Выводит граф обратных зависимостей."""
+    print("\n=== Обратные зависимости (BFS) ===")
+    for pkg, parents in graph.items():
+        parents_str = ", ".join(parents) if parents else "нет"
+        print(f"{pkg} <- {parents_str}")
