@@ -1,0 +1,3 @@
+Root: Lib1, Lib2
+Lib1: Core
+Lib2: Core

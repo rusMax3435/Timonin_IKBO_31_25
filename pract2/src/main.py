@@ -4,6 +4,7 @@ import re
 import sys
 from urllib.parse import urlparse
 import graph
+import visualizer
 
 
 def validate_version(version_str: str) -> bool:
@@ -23,13 +24,13 @@ def validate_url_or_path(repo_str: str, is_test_mode: bool) -> bool:
 
 
 def validate_output_filename(filename: str) -> bool:
-    """Проверяет расширение файла для сохранения графа."""
+    """Проверяет расширение файла."""
     allowed_extensions = ('.png', '.svg', '.jpg', '.jpeg')
     return filename.lower().endswith(allowed_extensions)
 
 
 def create_parser() -> argparse.ArgumentParser:
-    """Создает и настраивает парсер аргументов командной строки."""
+    """Создает парсер аргументов командной строки."""
     parser = argparse.ArgumentParser(
         description="Инструмент визуализации графа зависимостей"
     )
@@ -48,7 +49,6 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-o", "--output", required=True, help="Имя файла изображения графа"
     )
-    # Новый флаг для Этапа 4
     parser.add_argument(
         "-rev", "--reverse", action="store_true", 
         help="Вывод обратных зависимостей"
@@ -57,7 +57,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def validate_args(args: argparse.Namespace) -> list:
-    """Валидирует переданные аргументы и возвращает список ошибок."""
+    """Валидирует аргументы."""
     errors = []
     if not validate_version(args.version):
         errors.append(f"Неверный формат версии: '{args.version}'")
@@ -84,22 +84,32 @@ def main() -> None:
         sys.exit(1)
 
     try:
-        # Сначала всегда строим прямой граф
         dep_graph = graph.build_graph_bfs(
             args.package, args.repo, args.test_mode
         )
         
         if args.reverse:
-            # Строим и выводим обратный граф на основе прямого
             rev_graph = graph.build_reverse_graph_bfs(
                 args.package, dep_graph
             )
             graph.print_reverse_graph(rev_graph)
+            final_graph = rev_graph
         else:
             graph.print_graph(dep_graph)
+            final_graph = dep_graph
+
+        # --- ЭТАП 5: Визуализация ---
+        dot_code = visualizer.generate_dot(final_graph)
+        
+        print("\n=== Код Graphviz (DOT) ===")
+        print(dot_code)
+        
+        print(f"\nСохранение PNG в {args.output}...")
+        visualizer.save_png(dot_code, args.output)
+        print("Успешно сохранено!")
             
     except Exception as error:
-        print(f"Ошибка при построении графа: {error}", file=sys.stderr)
+        print(f"Ошибка: {error}", file=sys.stderr)
         sys.exit(1)
 
 
