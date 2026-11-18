@@ -98,7 +98,6 @@ def main() -> None:
             graph.print_graph(dep_graph)
             final_graph = dep_graph
 
-        # --- ЭТАП 5: Визуализация ---
         dot_code = visualizer.generate_dot(final_graph)
         
         print("\n=== Код Graphviz (DOT) ===")
