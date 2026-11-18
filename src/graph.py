@@ -72,7 +72,6 @@ def build_graph_bfs(root_pkg: str, source: str, test_mode: bool):
 
 def build_reverse_graph_bfs(target_pkg: str, forward_graph: dict):
     """Строит граф обратных зависимостей с помощью BFS."""
-    # 1. Создаем перевернутый список смежности
     reverse_adj = {}
     for pkg, deps in forward_graph.items():
         for dep in deps:
@@ -80,7 +79,6 @@ def build_reverse_graph_bfs(target_pkg: str, forward_graph: dict):
                 reverse_adj[dep] = []
             reverse_adj[dep].append(pkg)
 
-    # 2. Запускаем BFS по перевернутому графу
     visited = set()
     queue = collections.deque([target_pkg])
     result_graph = {}

@@ -54,7 +54,6 @@ class TestArgumentParsing(unittest.TestCase):
             "-v", "1.0"
         ])
         errors = validate_args(args)
-        # Должно быть 3 ошибки: версия, URL и имя файла
         self.assertEqual(len(errors), 3)
 
 

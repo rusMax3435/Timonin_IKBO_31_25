@@ -19,11 +19,9 @@ def build_raw_urls(repo_url: str, version: str) -> list[str]:
     
     urls = []
     if version == "latest":
-        # Пробуем ветку main, затем master
         urls.append(f"{base_raw}/{owner}/{repo}/refs/heads/main/Cargo.toml")
         urls.append(f"{base_raw}/{owner}/{repo}/refs/heads/master/Cargo.toml")
     else:
-        # Пробуем тег 1.0.0, затем v1.0.0
         urls.append(
             f"{base_raw}/{owner}/{repo}/refs/tags/{version}/Cargo.toml"
         )
@@ -43,7 +41,6 @@ def fetch_cargo_toml(repo_url: str, version: str, test_mode: bool) -> str:
 
     urls = build_raw_urls(repo_url, version)
     
-    # Отключаем проверку SSL для Windows (иначе urllib часто падает)
     context = ssl._create_unverified_context()
     
     for url in urls:
@@ -56,10 +53,8 @@ def fetch_cargo_toml(repo_url: str, version: str, test_mode: bool) -> str:
             ) as response:
                 return response.read().decode('utf-8')
         except urllib.error.HTTPError:
-            # Если 404, пробуем следующий URL из списка
             continue
         except urllib.error.URLError as error:
-            # Если проблема с сетью или SSL, выводим точную причину
             raise ConnectionError(
                 f"Ошибка сети ({error.reason}) при загрузке {url}"
             ) from error

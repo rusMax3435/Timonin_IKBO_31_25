@@ -16,7 +16,7 @@ class TestGraphBFS(unittest.TestCase):
         self.test_file.write("A: B, C\n")
         self.test_file.write("B: D\n")
         self.test_file.write("C: D\n")
-        self.test_file.write("D: A\n")  # Цикл
+        self.test_file.write("D: A\n")  
         self.test_file.close()
 
     def tearDown(self):
@@ -32,17 +32,13 @@ class TestGraphBFS(unittest.TestCase):
         self.assertEqual(result["D"], ["A"])
 
     def test_reverse_bfs(self):
-        # Строим прямой граф от A
         forward = build_graph_bfs("A", self.test_file.name, test_mode=True)
         
-        # Ищем, кто зависит от D (должны быть B и C)
         reverse = build_reverse_graph_bfs("D", forward)
         
-        # Проверяем связи: D <- B, C
         self.assertIn("D", reverse)
         self.assertEqual(sorted(reverse["D"]), ["B", "C"])
         
-        # Проверяем транзитивность: кто зависит от B? (A)
         self.assertIn("B", reverse)
         self.assertEqual(reverse["B"], ["A"])
 

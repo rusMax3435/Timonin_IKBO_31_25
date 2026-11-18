@@ -14,7 +14,7 @@ class TestVisualizer(unittest.TestCase):
         self.assertIn('"A" -> "B";', dot)
         self.assertIn('"A" -> "C";', dot)
         self.assertIn('"B" -> "D";', dot)
-        self.assertIn('"D";', dot)  # Изолированные узлы тоже должны быть
+        self.assertIn('"D";', dot)  
 
 
 if __name__ == "__main__":

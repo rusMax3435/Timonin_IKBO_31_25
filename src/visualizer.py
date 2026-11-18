@@ -8,7 +8,6 @@ def generate_dot(graph: dict[str, list[str]]) -> str:
     lines.append("    node [shape=box, style=filled, color=lightblue];")
     
     for pkg, deps in graph.items():
-        # Добавляем узел, даже если у него нет зависимостей
         lines.append(f'    "{pkg}";')
         for dep in deps:
             lines.append(f'    "{pkg}" -> "{dep}";')
