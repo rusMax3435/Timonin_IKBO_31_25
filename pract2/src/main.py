@@ -3,8 +3,7 @@ import os
 import re
 import sys
 from urllib.parse import urlparse
-import fetcher
-import parser
+import graph
 
 
 def validate_version(version_str: str) -> bool:
@@ -67,27 +66,6 @@ def validate_args(args: argparse.Namespace) -> list:
     return errors
 
 
-def process_dependencies(args: argparse.Namespace) -> None:
-    """Загружает и выводит прямые зависимости пакета."""
-    print("\n=== Прямые зависимости пакета ===")
-    try:
-        toml_content = fetcher.fetch_cargo_toml(
-            args.repo, args.version, args.test_mode
-        )
-        dependencies = parser.extract_dependencies(toml_content)
-        
-        if not dependencies:
-            print("Зависимости не найдены.")
-            return
-            
-        for dep in dependencies:
-            print(f" - {dep}")
-            
-    except (ValueError, ConnectionError, FileNotFoundError) as error:
-        print(f"Ошибка при сборе данных: {error}", file=sys.stderr)
-        sys.exit(1)
-
-
 def main() -> None:
     """Точка входа в приложение."""
     arg_parser = create_parser()
@@ -100,7 +78,14 @@ def main() -> None:
             print(f" - {err}", file=sys.stderr)
         sys.exit(1)
 
-    process_dependencies(args)
+    try:
+        dep_graph = graph.build_graph_bfs(
+            args.package, args.repo, args.test_mode
+        )
+        graph.print_graph(dep_graph)
+    except Exception as error:
+        print(f"Ошибка при построении графа: {error}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
