@@ -3,6 +3,7 @@ import ssl
 import urllib.error
 import urllib.request
 
+MIN_LEN = 2
 
 def build_raw_urls(repo_url: str, version: str) -> list[str]:
     """Строит список возможных URL к raw-файлу Cargo.toml."""
@@ -11,7 +12,7 @@ def build_raw_urls(repo_url: str, version: str) -> list[str]:
         clean_url = clean_url[:-4]
 
     parts = clean_url.split('/')
-    if len(parts) < 2:
+    if len(parts) < MIN_LEN:
         raise ValueError("Некорректный URL репозитория GitHub")
 
     owner, repo = parts[-2], parts[-1]
